@@ -3,7 +3,7 @@ name: libbpf
 on:
   push:
     branches:
-      - master
+      - main
       - actions/abuild/*
   schedule:
     - cron:  '0 9 * * *'
