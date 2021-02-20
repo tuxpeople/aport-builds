@@ -40,7 +40,7 @@ jobs:
       if: steps.resolve_versions.outputs.have_new_version == 'true'
       uses: actions/checkout@master
       with:
-        fetch-depth: 1
+        fetch-depth: 0
         repository: alpinelinux/aports
     - name: Try building the new release version
       if: steps.resolve_versions.outputs.have_new_version == 'true'
