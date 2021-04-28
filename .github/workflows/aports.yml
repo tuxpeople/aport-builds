@@ -21,11 +21,11 @@ jobs:
         include:
           - { github-repo: iovisor/bcc,      package-path: community/bcc }
           - { github-repo: iovisor/bpftrace, package-path: community/bpftrace }
-          - { github-repo: kornelski/dssim,  package-path: testing/dssim }
+          - { github-repo: kornelski/dssim,  package-path: community/dssim }
           - { github-repo: acj/krapslog-rs,  package-path: community/krapslog }
           - { github-repo: libbpf/libbpf,    package-path: community/libbpf }
           - { github-repo: iovisor/ply,      package-path: community/ply }
-          - { github-repo: asciimoo/wuzz,    package-path: testing/wuzz }
+          - { github-repo: asciimoo/wuzz,    package-path: community/wuzz }
 
     steps:
     - name: Resolve package and release versions
