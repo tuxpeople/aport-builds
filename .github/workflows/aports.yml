@@ -69,7 +69,7 @@ jobs:
         BRANCH_NAME: ${{ steps.resolve_versions.outputs.branch_name }}
         COMMIT_MESSAGE: ${{ steps.resolve_versions.outputs.commit_message }}
         COMMIT_AUTHOR_NAME: 'Adam Jensen'
-        COMMIT_AUTHOR_EMAIL: 'acjensen@gmail.com'
+        COMMIT_AUTHOR_EMAIL: 'adam@acj.sh'
         FAIL_IF_BRANCH_EXISTS: 'false'
       run: |
         #!/bin/sh
