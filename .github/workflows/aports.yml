@@ -71,7 +71,6 @@ jobs:
         COMMIT_AUTHOR_NAME: 'Adam Jensen'
         COMMIT_AUTHOR_EMAIL: 'acjensen@gmail.com'
         FAIL_IF_BRANCH_EXISTS: 'false'
-        GITLAB_PROJECT_ID: '248'
       run: |
         #!/bin/sh
 
@@ -119,6 +118,7 @@ jobs:
       env:
         BRANCH_NAME: ${{ steps.resolve_versions.outputs.branch_name }}
         COMMIT_MESSAGE: ${{ steps.resolve_versions.outputs.commit_message }}
+        GITLAB_PROJECT_ID: 1228
       run: |
         #!/bin/sh
 
@@ -126,7 +126,7 @@ jobs:
 
         private_token="${{ secrets.GITLAB_TOKEN }}"
         body="{
-          \"id\": \"248\",
+          \"id\": \"$GITLAB_PROJECT_ID\",
           \"source_branch\": \"$BRANCH_NAME\",
           \"target_branch\": \"master\",
           \"target_project_id\": 1,
@@ -136,7 +136,7 @@ jobs:
           \"allow_collaboration\": true
         }"
 
-        curl --silent -d "$body" "https://gitlab.alpinelinux.org/api/v4/projects/248/merge_requests" \
+        curl --silent -d "$body" "https://gitlab.alpinelinux.org/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests" \
              --header "PRIVATE-TOKEN:${private_token}" \
              --header "Content-type: application/json"
     - name: Notify Slack
