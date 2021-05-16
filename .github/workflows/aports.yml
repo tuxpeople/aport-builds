@@ -26,6 +26,7 @@ jobs:
           - { github-repo: libbpf/libbpf,    package-path: community/libbpf }
           - { github-repo: iovisor/ply,      package-path: community/ply }
           - { github-repo: asciimoo/wuzz,    package-path: community/wuzz }
+          - { github-repo: rbspy/rbspy,      package-path: testing/rbspy }
 
     steps:
     - name: Resolve package and release versions
