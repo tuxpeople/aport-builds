@@ -27,8 +27,8 @@ jobs:
           - { github-repo: libbpf/libbpf,    package-path: community/libbpf }
           # TODO: Watch tags instead of releases
           #- { github-repo: iovisor/ply,      package-path: community/ply }
-          - { github-repo: asciimoo/wuzz,    package-path: community/wuzz }
           - { github-repo: rbspy/rbspy,      package-path: community/rbspy }
+          - { github-repo: asciimoo/wuzz,    package-path: community/wuzz }
 
     steps:
     - name: Resolve package and release versions
