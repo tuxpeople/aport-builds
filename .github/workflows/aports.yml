@@ -56,7 +56,7 @@ jobs:
         fi
     - name: Check out aports
       if: steps.resolve_versions.outputs.have_new_version == 'true'
-      uses: actions/checkout@master
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
         repository: alpinelinux/aports
