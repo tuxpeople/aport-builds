@@ -42,7 +42,7 @@ jobs:
         set -euo pipefail
 
         PACKAGE_VERSION=$(curl -s https://raw.githubusercontent.com/alpinelinux/aports/master/$PACKAGE_PATH/APKBUILD | grep "pkgver=" | sed -E 's/pkgver=//g')
-        RELEASE_VERSION=$(curl -s https://github.com/$GITHUB_REPO/releases.atom | grep "releases/tag/" | head -1 | sed -nE 's/.*releases\/tag\/([^"]+)".*/\1/p' | tr -d 'v')
+        RELEASE_VERSION=$(curl -s https://api.github.com/repos/$GITHUB_REPO/releases/latest | jq -r .tag_name | tr -d 'v')
 
         if [ "$RELEASE_VERSION" == "$PACKAGE_VERSION" ]; then
           echo ::set-output name=have_new_version::false
