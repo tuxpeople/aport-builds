@@ -43,15 +43,15 @@ jobs:
         PACKAGE_VERSION=$(curl -s https://raw.githubusercontent.com/alpinelinux/aports/master/$PACKAGE_PATH/APKBUILD | grep "pkgver=" | sed -E 's/pkgver=//g')
         RELEASE_VERSION=$(curl -s https://api.github.com/repos/$GITHUB_REPO/releases/latest | jq -r .tag_name | tr -d 'v')
 
-        if [ "$RELEASE_VERSION" == "$PACKAGE_VERSION" ]; then
-          echo ::set-output name=have_new_version::false
-        else
+        if ruby -e "exit Gem::Version.new('$RELEASE_VERSION') > Gem::Version.new('$PACKAGE_VERSION')"; then
           echo ::set-output name=have_new_version::true
           echo ::set-output name=package_path::"$PACKAGE_PATH"
           echo ::set-output name=package_version::"$PACKAGE_VERSION"
           echo ::set-output name=release_version::"$RELEASE_VERSION"
           echo ::set-output name=branch_name::"$PACKAGE_PATH-to-$RELEASE_VERSION"
           echo ::set-output name=commit_message::"$PACKAGE_PATH: upgrade to $RELEASE_VERSION"
+        else
+          echo ::set-output name=have_new_version::false
         fi
     - name: Check out aports
       if: steps.resolve_versions.outputs.have_new_version == 'true'
