@@ -135,18 +135,17 @@ jobs:
     #     curl --silent -d "$body" "https://gitlab.alpinelinux.org/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests" \
     #          --header "PRIVATE-TOKEN:${private_token}" \
     #          --header "Content-type: application/json"
-    # - name: Notify Slack
-    #   if: steps.resolve_versions.outputs.have_new_version == 'true'
-    #   env:
-    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    #   run: |
-    #     branch_name="${{ steps.resolve_versions.outputs.branch_name }}"
-    #     branch_already_exists=${{ steps.create_branch.outputs.branch_name_already_exists == 'true' }}
-
-    #     if [ "$branch_already_exists" == "true" ]; then
-    #       curl -s -X POST -H 'Content-type: application/json' --data "{\"text\":\"New version of ${{ github.workflow }} is available, but branch '$branch_name' already exists\"}" $SLACK_WEBHOOK_URL
-    #     else
-    #       PR_URL="https://github.com/acj/aports/pull/new/$branch_name"
-    #       curl -s -X POST -H 'Content-type: application/json' --data "{\"text\":\"New branch for ${{ github.workflow }} created: $PR_URL\"}" $SLACK_WEBHOOK_URL
-    #     fi
-
+    - name: Discord notification
+      if: steps.resolve_versions.outputs.have_new_version == 'true'
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: |
+        branch_name="${{ steps.resolve_versions.outputs.branch_name }}"
+        branch_already_exists=${{ steps.create_branch.outputs.branch_name_already_exists == 'true' }}
+        # https://jasonloong.com/2018/sending-linux-variables-to-discord-webhook-from-linux-bash-shell-script/
+        if [ "$branch_already_exists" == "true" ]; then
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"New version of ${{ github.workflow }} is available, but branch '$branch_name' already exists\"}" $DISCORD_WEBHOOK_URL
+        else
+          PR_URL="https://github.com/acj/aports/pull/new/$branch_name"
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"New branch for ${{ github.workflow }} created: $PR_URL\"}" $DISCORD_WEBHOOK_URL
+        fi
