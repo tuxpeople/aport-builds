@@ -64,8 +64,8 @@ jobs:
       env:
         BRANCH_NAME: ${{ steps.resolve_versions.outputs.branch_name }}
         COMMIT_MESSAGE: ${{ steps.resolve_versions.outputs.commit_message }}
-        COMMIT_AUTHOR_NAME: 'Adam Jensen'
-        COMMIT_AUTHOR_EMAIL: 'adam@acj.sh'
+        COMMIT_AUTHOR_NAME: 'Thomas Deutsch'
+        COMMIT_AUTHOR_EMAIL: 'thomas@tuxpeople.org'
         FAIL_IF_BRANCH_EXISTS: 'false'
       run: |
         #!/bin/sh
@@ -109,32 +109,32 @@ jobs:
         else
           echo "Working tree clean. Nothing to commit."
         fi
-    # - name: Create merge request
-    #   if: steps.resolve_versions.outputs.have_new_version == 'true' && steps.create_branch.outputs.branch_name_already_exists != 'true'
-    #   env:
-    #     BRANCH_NAME: ${{ steps.resolve_versions.outputs.branch_name }}
-    #     COMMIT_MESSAGE: ${{ steps.resolve_versions.outputs.commit_message }}
-    #     GITLAB_PROJECT_ID: 1228
-    #   run: |
-    #     #!/bin/sh
+    - name: Create merge request
+      if: steps.resolve_versions.outputs.have_new_version == 'true' && steps.create_branch.outputs.branch_name_already_exists != 'true'
+      env:
+        BRANCH_NAME: ${{ steps.resolve_versions.outputs.branch_name }}
+        COMMIT_MESSAGE: ${{ steps.resolve_versions.outputs.commit_message }}
+        GITLAB_PROJECT_ID: 1861
+      run: |
+        #!/bin/sh
 
-    #     set -eu
+        set -eu
 
-    #     private_token="${{ secrets.GITLAB_TOKEN }}"
-    #     body="{
-    #       \"id\": \"$GITLAB_PROJECT_ID\",
-    #       \"source_branch\": \"$BRANCH_NAME\",
-    #       \"target_branch\": \"master\",
-    #       \"target_project_id\": 1,
-    #       \"remove_source_branch\": true,
-    #       \"title\": \"$COMMIT_MESSAGE\",
-    #       \"work_in_progress\": false,
-    #       \"allow_collaboration\": true
-    #     }"
+        private_token="${{ secrets.GITLAB_TOKEN }}"
+        body="{
+          \"id\": \"$GITLAB_PROJECT_ID\",
+          \"source_branch\": \"$BRANCH_NAME\",
+          \"target_branch\": \"master\",
+          \"target_project_id\": 1,
+          \"remove_source_branch\": true,
+          \"title\": \"$COMMIT_MESSAGE\",
+          \"work_in_progress\": false,
+          \"allow_collaboration\": true
+        }"
 
-    #     curl --silent -d "$body" "https://gitlab.alpinelinux.org/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests" \
-    #          --header "PRIVATE-TOKEN:${private_token}" \
-    #          --header "Content-type: application/json"
+        curl --silent -d "$body" "https://gitlab.alpinelinux.org/api/v4/projects/$GITLAB_PROJECT_ID/merge_requests" \
+            --header "PRIVATE-TOKEN:${private_token}" \
+            --header "Content-type: application/json"
     - name: Discord notification
       if: steps.resolve_versions.outputs.have_new_version == 'true'
       env:
@@ -146,6 +146,6 @@ jobs:
         if [ "$branch_already_exists" == "true" ]; then
           curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"New version of ${{ github.workflow }} is available, but branch '$branch_name' already exists\"}" $DISCORD_WEBHOOK_URL
         else
-          PR_URL="https://github.com/acj/aports/pull/new/$branch_name"
+          PR_URL="https://github.com/tuxpeople/aports/pull/new/$branch_name"
           curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"New branch for ${{ github.workflow }} created: $PR_URL\"}" $DISCORD_WEBHOOK_URL
         fi
