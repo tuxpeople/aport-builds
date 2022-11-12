@@ -1,0 +1,40 @@
+name: aports
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron:  '0 43 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Update Fork
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+
+    steps:
+    - name: Update my fork
+      id: update_fork
+      env:
+        BRANCH_NAME: ${{ steps.resolve_versions.outputs.branch_name }}
+        COMMIT_MESSAGE: ${{ steps.resolve_versions.outputs.commit_message }}
+        COMMIT_AUTHOR_NAME: 'Thomas Deutsch'
+        COMMIT_AUTHOR_EMAIL: 'thomas@tuxpeople.org'
+        FAIL_IF_BRANCH_EXISTS: 'false'
+      run: |
+        #!/bin/sh
+
+        set -eu
+
+        # Defaults to keep git happy
+        git config --global user.email "${COMMIT_AUTHOR_EMAIL}"
+        git config --global user.name "${COMMIT_AUTHOR_NAME}"
+
+        git clone https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.alpinelinux.org/tuxpeople/aports.git
+        git remote add upstream https://gitlab.alpinelinux.org/alpine/aports.git
+        git checkout master
+        git fetch upstream
+        git pull upstream master
+        git push origin master
