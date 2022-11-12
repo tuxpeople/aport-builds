@@ -33,6 +33,7 @@ jobs:
         git config --global user.name "${COMMIT_AUTHOR_NAME}"
 
         git clone https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.alpinelinux.org/tuxpeople/aports.git
+        cd aports
         git remote add upstream https://gitlab.alpinelinux.org/alpine/aports.git
         git checkout master
         git fetch upstream
