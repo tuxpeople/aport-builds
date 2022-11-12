@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { github-repo: jesseduffield/lazydocker,      package-path: testing/lazydocker }
+          - { github-repo: jesseduffield/lazydocker,      package-path: community/lazydocker }
           - { github-repo: jesseduffield/lazygit, package-path: community/lazygit }
           - { github-repo: DNS-OARC/dnsperf,   package-path: testing/dnsperf }
 
@@ -73,8 +73,8 @@ jobs:
         set -eu
 
         # Defaults to keep git happy
-        git config --global user.email "actions@github.com"
-        git config --global user.name "GitHub Actions"
+        git config --global user.email "${COMMIT_AUTHOR_EMAIL}"
+        git config --global user.name "${COMMIT_AUTHOR_NAME}"
 
         git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.alpinelinux.org/tuxpeople/aports.git
 
