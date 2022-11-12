@@ -1,4 +1,4 @@
-name: aports
+name: upgrade_fork
 
 on:
   push:
