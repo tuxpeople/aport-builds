@@ -22,6 +22,7 @@ jobs:
           - { github-repo: jesseduffield/lazydocker,      package-path: community/lazydocker }
           - { github-repo: jesseduffield/lazygit, package-path: community/lazygit }
           - { github-repo: DNS-OARC/dnsperf,   package-path: testing/dnsperf }
+          - { github-repo: doitintl/kube-no-trouble,   package-path: testing/kube-no-trouble }
 
     steps:
     - name: Resolve package and release versions
